@@ -1,9 +1,9 @@
 import axios from 'axios';
 export default class service {
-  static endpoint = "https://792zxpfywg.execute-api.us-east-1.amazonaws.com/v2/Equipo";
-  static endpointGetBySection = "https://meke072ewi.execute-api.us-east-1.amazonaws.com/v2/Mantenimientos";
+  static endpoint = "https://gxmbd43v2c.execute-api.us-east-1.amazonaws.com/prod1/Equipo";
+  static endpointGetBySection = "https://5jsnk7xft1.execute-api.us-east-1.amazonaws.com/prod1/Mantenimientos";
   static endpointMant = "https://mas4zhpar9.execute-api.us-east-1.amazonaws.com/v2/Mantenimiento/equipo";
-  static endpointStepper = "https://loihwzj263.execute-api.us-east-1.amazonaws.com/def/Instructivo";
+  static endpointStepper = "https://flpzxhsyx2.execute-api.us-east-1.amazonaws.com/prod1/Instructivo";
 
   //Obtiene todos los mantenimientos
   static getAllMantenances(obj) {
