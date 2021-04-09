@@ -9,17 +9,16 @@ export default class service {
   static getAllMantenances(obj) {
     return axios.get(`${service.endpointGetBySection}/${obj.Año}-${obj.Mes}`, {
       headers: {
-        "x-api-key": "iRNB5DZhMO4K8xQoKSbsm9yEEnxx0NlW6Deag3Ab"
+        "x-api-key": "x1BFY70CR52pPiERZcByx7YJ1JWHNMUA4iB4USRB"
       }
     });
   }
-
 
   //Obtiene los equipos por id 
   static getEquipmentById(idEquipo) {
     return axios.get(`${service.endpoint}/${idEquipo}`, {
       headers: {
-        "x-api-key": "iRNB5DZhMO4K8xQoKSbsm9yEEnxx0NlW6Deag3Ab"
+        "x-api-key": "x1BFY70CR52pPiERZcByx7YJ1JWHNMUA4iB4USRB"
       }
     });
   }
@@ -28,19 +27,18 @@ export default class service {
   static getMantenances(id) {
     return axios.get(`${service.endpointMant}/${id}`, {
       headers: {
-        "x-api-key": "iRNB5DZhMO4K8xQoKSbsm9yEEnxx0NlW6Deag3Ab"
+        "x-api-key": "x1BFY70CR52pPiERZcByx7YJ1JWHNMUA4iB4USRB"
       }
     });
   }
-
-
 
   //Obtiene los pasos para el uso de un equipo
   static getSteps(id) {
     return axios.get(`${service.endpointStepper}/${id}`, {
       headers: {
-        "x-api-key": "iRNB5DZhMO4K8xQoKSbsm9yEEnxx0NlW6Deag3Ab"
+        "x-api-key": "x1BFY70CR52pPiERZcByx7YJ1JWHNMUA4iB4USRB"
       }
     });
   }
+
 }

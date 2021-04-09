@@ -6,7 +6,7 @@
     >
       <div style="width: 108px" v-for="(i, index) in items" :key="index">
         <q-btn
-          :color="drawerState ? 'grey-9' : 'orange-' + i.Color"
+          :color="'blue-' + i.Color"
           style="width: 100%; margin-bottom: -0.7rem"
           align="between"
           class="btn-fixed-width"
@@ -138,7 +138,6 @@ export default {
     },
   },
   computed: {
-  
     //STATE DE LA FECHA ACTUAL DE UNA SECCION DE UN MANTENIMIENTO SELECCIONADO
     MaintenanceSectionSelected: {
       get() {
