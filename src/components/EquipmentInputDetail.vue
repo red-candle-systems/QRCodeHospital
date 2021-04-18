@@ -22,12 +22,39 @@
               <img :src="src" id="Imagen" basic class="imageStyle" />
             </q-toolbar>
           </div>
+
+          <div class="col-12 col-sm-6 col-lg-4 col-md-4">
+            <div
+              style="
+                background-color: #1976d2;
+                margin-top: 1rem;
+                height: 0.2rem;
+                width: 100%;
+              "
+              class="glossy"
+            ></div>
+          </div>
+
           <div class="col-12 col-sm-6 col-lg-4 col-md-4">
             <q-input
               readonly
               v-model="textNumeroSerie"
               filled
-              :label="this.props.name"
+              :label="this.props[0].name"
+              style="width: 100%"
+            >
+              <template v-slot:prepend>
+                <q-icon name="line_weight" />
+              </template>
+            </q-input>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-4 col-md-4">
+            <q-input
+              readonly
+              v-model="textNumeroControl"
+              filled
+              :label="this.props[7].name"
               style="width: 100%"
             >
               <template v-slot:prepend>
@@ -85,12 +112,7 @@
               filled
               :label="this.props[4].name"
               style="width: 100%"
-              :readonly="
-                $store.state.global.Usuario.rol === 1 ||
-                $store.state.global.Usuario.rol === 2
-                  ? false
-                  : true
-              "
+              readonly
             >
               <template v-slot:prepend>
                 <q-icon name="line_weight" />
@@ -128,6 +150,20 @@
           </div>
           <div class="col-12 col-sm-6 col-lg-4 col-md-4">
             <q-input
+              v-model="textEstatus"
+              type="text"
+              filled
+              label="Estatus"
+              style="width: 100%"
+              readonly
+            >
+              <template v-slot:prepend>
+                <q-icon name="line_weight" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-4 col-md-4">
+            <q-input
               readonly
               v-model="textCosto"
               filled
@@ -144,12 +180,20 @@
             <q-input
               readonly
               filled
+              color="blue"
               v-model="dateGarantia"
               style="width: 100%"
-              label="Fecha de Garantía"
+              label="Fecha de garantia"
             >
               <template v-slot:prepend>
-                <q-icon name="event"> </q-icon>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="dateGarantia" mask="YYYY-MM-DD" />
+                  </q-popup-proxy>
+                </q-icon>
               </template>
             </q-input>
           </div>
@@ -170,14 +214,25 @@
 
           <div class="col-12 col-sm-6 col-lg-4 col-md-4">
             <q-input
-              readonly
               filled
+              color="blue"
               v-model="fecha_prox_mantenimiento"
               style="width: 100%"
-              label="Fecha de próximo mantenimiento"
+              label="Fecha de proximo mantenimiento"
+              readonly
             >
               <template v-slot:prepend>
-                <q-icon name="event"> </q-icon>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date
+                      v-model="fecha_prox_mantenimiento"
+                      mask="YYYY-MM-DD"
+                    />
+                  </q-popup-proxy>
+                </q-icon>
               </template>
             </q-input>
           </div>
@@ -192,7 +247,7 @@
                 { label: 'Estatus en Alta', value: true },
                 { label: 'Estatus en Baja', value: false },
               ]"
-              :readonly="$store.state.global.Usuario.rol === 1 ? false : true"
+              readonly
             />
           </div>
         </div>
@@ -216,6 +271,7 @@
         <div class="q-pa-md q-gutter-sm" style="margin-top: -2.8rem">
           <q-editor readonly v-model="editor" :toolbar="[]" />
         </div>
+
         <div
           style="
             background-color: #1976d2;
@@ -226,13 +282,68 @@
           class="glossy"
         ></div>
 
-        <q-item-label
-          style="margin-top: 1rem; margin-bottom: -1.3rem; font-weight: bold"
-          class="text-right"
-        >
-          Todos los derechos reservados
-          <q-icon name="copyright" size="1.3rem" color="blue-10"></q-icon>
-        </q-item-label>
+        <q-dialog v-model="alert">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">¡{{ aviso }}!</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">¡{{ aviso2 }}!</q-card-section>
+            <q-card-actions align="right">
+              <q-btn flat label="OK" color="primary" to="/Home" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="confirm" persistent>
+          <q-card>
+            <q-card-section class="row items-center">
+              <q-avatar
+                icon="keyboard_return"
+                color="primary"
+                text-color="white"
+              />
+              <span class="q-ml-sm">¿Seguro que deseas salir?</span>
+            </q-card-section>
+
+            <q-card-actions align="right">
+              <q-btn flat label="Cancelar" color="primary" v-close-popup />
+              <q-btn
+                flat
+                label="Salir"
+                to="/Home"
+                color="primary"
+                v-close-popup
+              />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="prompt" persistent>
+          <q-card style="min-width: 90%">
+            <q-card-section>
+              <div class="text-h6">¿Cuál es el problema?</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <q-input
+                dense
+                v-model="report"
+                autofocus
+                @keyup.enter="prompt = false"
+              />
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="Cancelar" v-close-popup />
+              <q-btn
+                flat
+                label="Reportar"
+                v-close-popup
+                @click="_insertReport()"
+              />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </div>
@@ -252,17 +363,14 @@ export default {
   },
   data() {
     return {
-      value: "https://example.com/",
       size: 300,
       tipo: "text",
-
-      files: null,
       aviso: "Registro Guardado",
       aviso2: "Su registro se ha generado exitosamente",
       props: [
         {
           id: 1,
-          name: "Numero de serie",
+          name: "Número de serie",
         },
         {
           id: 2,
@@ -288,6 +396,10 @@ export default {
           id: 7,
           name: "Costo",
         },
+        {
+          id: 8,
+          name: "Número de control",
+        },
       ],
       textNumeroSerie: "",
       textEquipo: "",
@@ -305,6 +417,8 @@ export default {
       dateGarantia: "",
       dateCompra: "",
       textProveedor: "",
+      textNumeroControl: "",
+      textEstatus: "",
       files: null,
       alert: false,
       confirm: false,
@@ -315,7 +429,6 @@ export default {
   methods: {
     async cargarEquipoSelected() {
       let response = await service.getEquipmentById(this.IDEM);
-
       this.EquipoSelected = response.data;
       this.textNumeroSerie = this.EquipoSelected.No_Serie;
       this.textEquipo = this.EquipoSelected.Nombre_Equipo;
@@ -332,17 +445,8 @@ export default {
       this.dateGarantia = this.EquipoSelected.Fecha_Garantia;
       this.dateCompra = this.EquipoSelected.Fecha_Adquisicion;
       this.textProveedor = this.EquipoSelected.Proveedor;
-    },
-    getReports() {
-      if (this.Usuario.rol == 1 || this.Usuario.rol == 2) {
-        //Si es tipo de usuario 1 o 2 puede ir a la lista de los reportes
-        this.$router.push({ path: `/ReportsEquipmentSection` });
-      } //si no lo es, entonces, solo puede crear los reportes
-      else {
-        if (this.Usuario.rol == 3) {
-          this.prompt = true;
-        }
-      }
+      this.textNumeroControl = this.EquipoSelected.textNumeroControl;
+      this.textEstatus = this.EquipoSelected.textEstatus;
     },
     //Metodo que redirige a la pagina con la lista de los matenimientos de un equipo
     verMantenimientos() {
@@ -373,7 +477,6 @@ export default {
         );
       },
     },
-
     EquipoSelected: {
       get() {
         return this.$store.state.cardState.EquipoSelected;
@@ -382,7 +485,6 @@ export default {
         this.$store.commit("cardState/updateEquipoSelected", val);
       },
     },
-
     IDEM: {
       get() {
         return this.$store.state.cardState.IDEM;

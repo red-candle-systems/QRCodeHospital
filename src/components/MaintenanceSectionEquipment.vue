@@ -50,11 +50,10 @@ export default {
   },
 
   created() {
-    let fecha1 = new Date("2021/01/01"); //Fecha de inicio 2020
+    let fecha1 = new Date("2021/04/01"); //Fecha de inicio 2020
     let fecha2 = new Date(); //Fecha de hoy
 
     //console.log("este es el mes", fecha2.getMonth());
-
     let mes = fecha2.getMonth() + 1;
     let desc = false;
     let color = 6;
