@@ -430,6 +430,8 @@ export default {
     async cargarEquipoSelected() {
       let response = await service.getEquipmentById(this.IDEM);
       this.EquipoSelected = response.data;
+      console.log(this.EquipoSelected);
+
       this.textNumeroSerie = this.EquipoSelected.No_Serie;
       this.textEquipo = this.EquipoSelected.Nombre_Equipo;
       this.textModelo = this.EquipoSelected.Modelo;
@@ -445,8 +447,8 @@ export default {
       this.dateGarantia = this.EquipoSelected.Fecha_Garantia;
       this.dateCompra = this.EquipoSelected.Fecha_Adquisicion;
       this.textProveedor = this.EquipoSelected.Proveedor;
-      this.textNumeroControl = this.EquipoSelected.textNumeroControl;
-      this.textEstatus = this.EquipoSelected.textEstatus;
+      this.textNumeroControl = this.EquipoSelected.Numero_Control;
+      this.textEstatus = this.EquipoSelected.Status;
     },
     //Metodo que redirige a la pagina con la lista de los matenimientos de un equipo
     verMantenimientos() {
